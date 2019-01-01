@@ -1,0 +1,7 @@
+#! /bin/bash
+
+docker build -t containerception . 
+docker run -d -t  --name containerception  containerception
+docker exec -it containerception /bin/ash
+docker stop containerception
+docker rm containerception
