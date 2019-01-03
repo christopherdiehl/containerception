@@ -1,6 +1,11 @@
 # STEP 1 build executable binary
-FROM golang:alpine 
+FROM ubuntu 
 
-COPY containerception /usr/local/bin
-
-CMD ["/bin/ash"]
+# Setup vim and golang to make development easier
+RUN apt-get update && apt-get install -y \
+    golang \
+    curl \
+    git
+RUN  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+COPY containerception /usr/local/bin 
+COPY vimrc .vimrc
