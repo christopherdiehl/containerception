@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     golang \
     curl \
     git \
-    vim
+    vim 
 RUN  git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 COPY containerception /usr/local/bin 
 COPY vimrc /root/.vimrc

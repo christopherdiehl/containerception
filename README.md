@@ -159,10 +159,18 @@ func main() {
                 panic("Invalid command")
         }
 }
+//hacky way to copy directories for now.. This is solely for ubuntu and definitely not recommended for production
 func initialize() {
         must(MakeDir("/rootfs"))
         must(MakeDir("/rootfs/proc"))
         must(CopyDir("/bin/", "/rootfs/bin/"))
+        must(CopyDir("/dev/", "/rootfs/dev/"))
+        must(CopyDir("/etc/", "/rootfs/etc/"))
+        must(CopyDir("/lib/", "/rootfs/lib/"))
+        must(CopyDir("/root/", "/rootfs/root/"))
+        must(CopyDir("/tmp/", "/rootfs/tmp/"))
+        must(CopyDir("/usr/", "/rootfs/usr/"))
+        must(CopyDir("/usr/", "/rootfs/usr/"))
 }
 func run() {
         //fork and exec
@@ -179,9 +187,9 @@ func run() {
 func child() {
         fmt.Printf("Running %v with PID %v\n", os.Args[2:], os.Getpid())
         must(syscall.Mount("rootfs", "rootfs", "", syscall.MS_BIND, ""))
-        must(os.MkdirAll("rootfs/oldrootfs", 0700))
-        must(syscall.PivotRoot("rootfs", "rootfs/oldrootfs"))
+        must(syscall.Chroot("rootfs"))
         must(os.Chdir("/"))
+        must(syscall.Mount("proc", "proc", "proc", 0, ""))
         cmd := exec.Command(os.Args[2], os.Args[3:]...)
         cmd.Stdin = os.Stdin
         cmd.Stdout = os.Stdout
@@ -190,6 +198,7 @@ func child() {
         //setup hostname etc
         must(syscall.Sethostname([]byte("containerception")))
         must(cmd.Run())
+        must(syscall.Unmount("proc",0))
 }
 func CopyDir(src, dst string) error {
         var err error
