@@ -17,7 +17,6 @@ Plugin 'w0rp/ale'
 Plugin 'tpope/vim-fugitive'
 Plugin 'moby/moby' , {'rtp': '/contrib/syntax/vim/'}
 Plugin 'scrooloose/nerdtree'
-Plugin 'Shougo/deoplete.nvim'
 " SETTINGS "
 set autoread
 set incsearch
@@ -74,7 +73,7 @@ noremap <leader>9 9gt
 noremap <leader>0 :tablast<cr>
 " SET THE COLORSCHEME
 colorscheme gruvbox
-set background=dark
+set background=light
 "Set Custom :Find command using ripgrep
 " --column: Show column number
 " --line-number: Show line number
