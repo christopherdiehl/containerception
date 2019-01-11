@@ -9,7 +9,7 @@ A container is a standard unit of software that packages up code and all its dep
 
 ## Fork & Exec
 
-In order to create the container, we need to run a new command and use fork/exec to setup a child process with the correct permissions. The child process that is run will technically be the container, with the parent process being solely responsible for setting up the correct environment. It's a bit of a hack, but is also used by the talented folks at docker.
+In order to create the container, we need to run a new command and use fork/exec to setup a child process with the correct permissions. The child process that is run will technically be the container, with the parent process being solely responsible for setting up the correct environment. It's a bit of a hack, but we'll make it work.
 
 ## First pass without any namespaces or control groups.
 
@@ -34,7 +34,7 @@ func main() {
 	case "child":
 		child()
 	default:
-		panic("Invalid command")
+		panic("Invalid command")x
 	}
 }
 func run() {
@@ -126,9 +126,8 @@ func must(err error) {
 
 Notice the PID is 1. That's because the syscall flags setup a new PID, Network, and UTS.
 Now try `go run main.go run ps aux` notice that the container can _still_ see all the hosts running processes? That's because ps is special and reads in the processes in the /proc filesystem. So we need to make that.
-Try `go run main.go run /bin/bash` notice the terminal prompt is now `root@containerception` that's because we have setup a new hostname. Please feel free to play around in the shell for a bit, and make sure to notice how the changes you made are evident after you exit out (Ctrl+D).
 
-Let's setup the proc folder for ps as well as ensure the container is restricted to it's own file system. PS. time to bust out CGroups.
+Let's setup the proc folder for ps as well as ensure the container is restricted to it's own file system.
 
 ```
 package main
@@ -188,4 +187,6 @@ func must(err error) {
 
 ```
 
-Play around with that and you should see that ps is working correctly and the container has it's own little filesystem! Please note this filesystem persists across multiple containers, and currently has no way to stop user's from "breaking" out of the current working directory. Please note that the rootfs directory is created in the Dockerfile.
+Play around with that and you should see that ps is working correctly and the container has it's own little filesystem! Please note this filesystem persists across multiple containers and be aware that the rootfs directory is created in the Dockerfile.
+
+Credit for this repo goes to the amazing namespaces in Go articles by [Teddy King](https://github.com/teddyking) as well as Liz Rice's own talk [Container From Scratch](https://github.com/lizrice/containers-from-scratch)

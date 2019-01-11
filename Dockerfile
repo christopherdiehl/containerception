@@ -14,6 +14,12 @@ COPY vimrc /root/.vimrc
 #setup proc and other needed folders
 RUN mkdir rootfs
 RUN mkdir rootfs/proc
-RUN wget "https://raw.githubusercontent.com/teddyking/ns-process/4.0/assets/busybox.tar"
-RUN tar -xf busybox.tar rootfs/
-RUN cp /root/bin/bash /root/rootfs/bin/bash
+RUN cp /bin/ -R rootfs/bin
+RUN cp /lib64/ -R rootfs/lib64
+RUN cp /lib/ -R rootfs/lib
+RUN cp /dev/ -R rootfs/dev
+RUN cp /mnt/ -R rootfs/mnt
+RUN cp /root/ -R rootfs/root
+RUN cp /tmp/ -R rootfs/tmp
+RUN mkdir rootfs/usr
+RUN mkdir rootfs/usr/sbin
