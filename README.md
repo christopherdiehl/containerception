@@ -187,6 +187,6 @@ func must(err error) {
 
 ```
 
-Play around with that and you should see that ps is working correctly and the container has it's own little filesystem! Please note this filesystem persists across multiple containers and be aware that the rootfs directory is created in the Dockerfile.
+Play around with that and you should see that ps is working correctly and the container has it's own little filesystem! Please note this filesystem persists across multiple containers and be aware that the rootfs directory is created in the Dockerfile. If you're interested I would recommend you try to expirement with the capaibilites of the container using `go run main.go run /bin/bash` then trying something like a fork bomb: `bomb(){ bomb|bomb& };bomb` (Note be careful with that thing)
 
 Credit for this repo goes to the amazing namespaces in Go articles by [Teddy King](https://github.com/teddyking) as well as Liz Rice's own talk [Container From Scratch](https://github.com/lizrice/containers-from-scratch)
